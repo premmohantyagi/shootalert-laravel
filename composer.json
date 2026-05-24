@@ -1,0 +1,29 @@
+{
+    "name": "shootalert/shootalert-laravel",
+    "description": "Laravel SDK for ShootAlert: ships uncaught exceptions to the platform with breadcrumbs and request context.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": ["laravel", "error-tracking", "exceptions", "monitoring", "shootalert"],
+    "require": {
+        "php": "^8.2",
+        "illuminate/contracts": "^10.0|^11.0|^12.0",
+        "illuminate/support": "^10.0|^11.0|^12.0",
+        "illuminate/queue": "^10.0|^11.0|^12.0",
+        "illuminate/http": "^10.0|^11.0|^12.0",
+        "monolog/monolog": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ShootAlert\\Laravel\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "ShootAlert\\Laravel\\ShootAlertServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

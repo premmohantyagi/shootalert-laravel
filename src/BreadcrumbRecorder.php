@@ -13,7 +13,7 @@ class BreadcrumbRecorder
     /** @var list<array{type: string, timestamp: string, message: string}> */
     private array $entries = [];
 
-    public function __construct(private readonly int $max = 25) {}
+    public function __construct(private int $max = 25) {}
 
     public function record(string $type, string $message): void
     {

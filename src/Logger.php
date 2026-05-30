@@ -4,8 +4,6 @@ namespace ShootAlert\Laravel;
 
 use Illuminate\Http\Request;
 use Monolog\Handler\AbstractProcessingHandler;
-use Monolog\Level;
-use Monolog\LogRecord;
 use ShootAlert\Laravel\Jobs\ShipErrorEventJob;
 use Throwable;
 
@@ -15,21 +13,32 @@ use Throwable;
  * exception Laravel routes to the log also routes here. Plain log lines
  * without an exception are ignored — the SDK is for exception telemetry,
  * not log shipping.
+ *
+ * Works under both Monolog 2 (Laravel 8/9) and Monolog 3 (Laravel 10+):
+ * the level constant 400 is ERROR in both, and write() takes an untyped
+ * record so its signature stays compatible with Monolog 2's array record
+ * and Monolog 3's LogRecord object.
  */
 class Logger extends AbstractProcessingHandler
 {
-    public function __construct(int|string|Level $level = Level::Error, bool $bubble = true)
+    public function __construct($level = 400, bool $bubble = true)
     {
         parent::__construct($level, $bubble);
     }
 
-    protected function write(LogRecord $record): void
+    /**
+     * @param  array<string, mixed>|\Monolog\LogRecord  $record
+     */
+    protected function write($record): void
     {
         if (! config('shootalert.enabled', true)) {
             return;
         }
 
-        $exception = $record->context['exception'] ?? null;
+        // Monolog 2 hands us an array record; Monolog 3 a LogRecord object.
+        $context = is_array($record) ? ($record['context'] ?? []) : $record->context;
+
+        $exception = $context['exception'] ?? null;
         if (! $exception instanceof Throwable) {
             // Plain log lines (warning/info/notice) are recorded as breadcrumbs
             // by the service provider's event listener; we only ship actual

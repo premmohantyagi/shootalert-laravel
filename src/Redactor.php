@@ -13,7 +13,7 @@ namespace ShootAlert\Laravel;
 class Redactor
 {
     /** @param  list<string>  $needles */
-    public function __construct(private readonly array $needles = []) {}
+    public function __construct(private array $needles = []) {}
 
     public function redact(mixed $value): mixed
     {

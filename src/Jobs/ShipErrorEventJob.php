@@ -23,7 +23,7 @@ class ShipErrorEventJob implements ShouldQueue
     public int $backoff = 30;
 
     /** @param  array<string, mixed>  $event */
-    public function __construct(public readonly array $event) {}
+    public function __construct(public array $event) {}
 
     public function handle(ApiClient $client): void
     {

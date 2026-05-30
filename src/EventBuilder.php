@@ -15,9 +15,9 @@ use Throwable;
 class EventBuilder
 {
     public function __construct(
-        private readonly BreadcrumbRecorder $breadcrumbs,
-        private readonly Redactor $redactor,
-        private readonly string $basePath,
+        private BreadcrumbRecorder $breadcrumbs,
+        private Redactor $redactor,
+        private string $basePath,
     ) {}
 
     /**

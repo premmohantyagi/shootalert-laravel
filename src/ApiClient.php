@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\Http;
 class ApiClient
 {
     public function __construct(
-        private readonly string $endpoint,
-        private readonly string $token,
+        private string $endpoint,
+        private string $token,
     ) {}
 
     /**
@@ -27,17 +27,24 @@ class ApiClient
         $timestamp = (string) time();
         $signature = hash_hmac('sha256', $timestamp.$body, $this->token);
 
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-            'X-Sa-Project-Token' => $this->token,
-            'X-Sa-Timestamp' => $timestamp,
-            'X-Sa-Signature' => $signature,
-        ])
-            ->withBody($body, 'application/json')
-            ->timeout(10)
-            ->retry(2, 250, throw: false)
-            ->post($this->endpoint);
+        try {
+            // No `throw:` named arg here — that retry() parameter only exists on
+            // Laravel 9+. The try/catch gives the same "never throw, report a
+            // failed result" behaviour across Laravel 8–13.
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+                'X-Sa-Project-Token' => $this->token,
+                'X-Sa-Timestamp' => $timestamp,
+                'X-Sa-Signature' => $signature,
+            ])
+                ->withBody($body, 'application/json')
+                ->timeout(10)
+                ->retry(2, 250)
+                ->post($this->endpoint);
+        } catch (\Throwable $e) {
+            return ['ok' => false, 'status' => 0, 'body' => $e->getMessage()];
+        }
 
         return [
             'ok' => $response->successful(),

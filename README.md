@@ -1,5 +1,10 @@
 # ShootAlert Laravel SDK
 
+[![Tests](https://github.com/premmohantyagi/shootalert-laravel/actions/workflows/tests.yml/badge.svg)](https://github.com/premmohantyagi/shootalert-laravel/actions/workflows/tests.yml)
+[![Packagist Version](https://img.shields.io/packagist/v/shootalert/shootalert-laravel)](https://packagist.org/packages/shootalert/shootalert-laravel)
+[![Total Downloads](https://img.shields.io/packagist/dt/shootalert/shootalert-laravel)](https://packagist.org/packages/shootalert/shootalert-laravel)
+[![License](https://img.shields.io/packagist/l/shootalert/shootalert-laravel)](LICENSE)
+
 Ship uncaught exceptions from your Laravel app to ShootAlert with stack traces, breadcrumbs (recent log lines + DB queries), request context, and authenticated user info.
 
 ## Requirements
